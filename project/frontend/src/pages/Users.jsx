@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
-import { Users as UsersIcon, Shield, Edit, Trash2, Plus } from 'lucide-react';
+import { Users as UsersIcon, Shield, Edit, Trash2, Plus, UserCheck, UserX } from 'lucide-react';
 import axios from 'axios';
 
 const Users = () => {
@@ -21,9 +21,10 @@ const Users = () => {
   const fetchUsers = async () => {
     try {
       const response = await axios.get(`${API_URL}/users`);
-      setUsers(response.data);
+      setUsers(response.data.users || []);
     } catch (error) {
       console.error('Error fetching users:', error);
+      setUsers([]);
     } finally {
       setLoading(false);
     }
@@ -45,13 +46,13 @@ const Users = () => {
   const getRoleBadgeColor = (role) => {
     switch (role) {
       case 'admin':
-        return 'bg-purple-100 text-purple-800';
+        return 'bg-gradient-to-r from-purple-500 to-purple-600 text-white';
       case 'user':
-        return 'bg-blue-100 text-blue-800';
+        return 'bg-gradient-to-r from-blue-500 to-blue-600 text-white';
       case 'read-only':
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gradient-to-r from-slate-500 to-slate-600 text-white';
       default:
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-gradient-to-r from-slate-500 to-slate-600 text-white';
     }
   };
 
@@ -59,9 +60,11 @@ const Users = () => {
     return (
       <div className="flex items-center justify-center min-h-96">
         <div className="text-center">
-          <Shield size={48} className="mx-auto text-red-500 mb-4" />
-          <h2 className="text-xl font-semibold text-gray-800 mb-2">Access Denied</h2>
-          <p className="text-gray-600">You don't have permission to view this page.</p>
+          <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Shield size={32} className="text-red-500" />
+          </div>
+          <h2 className="text-xl font-bold text-slate-800 mb-2">Access Denied</h2>
+          <p className="text-slate-600">You don't have permission to view this page.</p>
         </div>
       </div>
     );
@@ -76,11 +79,14 @@ const Users = () => {
   }
 
   return (
-    <div className="space-y-6 fade-in">
+    <div className="space-y-8 fade-in">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">User Management</h1>
-          <p className="text-gray-600 mt-1">Manage system users and their permissions</p>
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+            User Management
+          </h1>
+          <p className="text-slate-600 mt-2">Manage system users and their permissions</p>
         </div>
         
         <button
@@ -92,122 +98,154 @@ const Users = () => {
         </button>
       </div>
 
-      {/* Users List */}
-      <div className="card">
-        {users.length === 0 ? (
-          <div className="text-center py-12">
-            <UsersIcon size={48} className="mx-auto text-gray-400 mb-4" />
-            <p className="text-gray-500 text-lg">No users found</p>
-          </div>
-        ) : (
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Name</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Email</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Role</th>
-                  <th className="text-left py-3 px-4 font-semibold text-gray-700">Joined</th>
-                  <th className="text-right py-3 px-4 font-semibold text-gray-700">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users.map((userData, index) => (
-                  <tr 
-                    key={userData._id} 
-                    className={`border-b border-gray-100 hover:bg-gray-50 transition-colors ${
-                      index % 2 === 0 ? 'bg-white' : 'bg-gray-50'
-                    }`}
-                  >
-                    <td className="py-4 px-4">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-full flex items-center justify-center">
-                          <span className="text-white font-medium text-sm">
-                            {userData.name.charAt(0).toUpperCase()}
-                          </span>
-                        </div>
-                        <div>
-                          <p className="font-medium text-gray-800">{userData.name}</p>
-                        </div>
-                      </div>
-                    </td>
-                    <td className="py-4 px-4 text-gray-600">
-                      {userData.email}
-                    </td>
-                    <td className="py-4 px-4">
-                      <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium capitalize ${getRoleBadgeColor(userData.role)}`}>
-                        <Shield size={12} className="mr-1" />
-                        {userData.role}
-                      </span>
-                    </td>
-                    <td className="py-4 px-4 text-gray-600">
-                      {new Date(userData.createdAt).toLocaleDateString()}
-                    </td>
-                    <td className="py-4 px-4 text-right">
-                      <div className="flex items-center justify-end space-x-2">
-                        <button
-                          onClick={() => {
-                            setEditingUser(userData);
-                            setShowForm(true);
-                          }}
-                          className="text-blue-600 hover:text-blue-800 p-1"
-                        >
-                          <Edit size={16} />
-                        </button>
-                        {userData._id !== user._id && (
-                          <button
-                            onClick={() => handleDeleteUser(userData._id)}
-                            className="text-red-600 hover:text-red-800 p-1"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        )}
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-      </div>
-
       {/* Role Statistics */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="card bg-gradient-to-r from-purple-500 to-purple-600 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-purple-100 text-sm">Administrators</p>
-              <p className="text-2xl font-bold">
-                {users.filter(u => u.role === 'admin').length}
-              </p>
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-slate-200/60 hover:shadow-xl transition-all duration-300">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-3 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl shadow-lg">
+              <Shield size={24} className="text-white" />
             </div>
-            <Shield size={32} className="text-purple-200" />
+            <UserCheck size={20} className="text-purple-500" />
+          </div>
+          <div>
+            <p className="text-slate-600 text-sm font-medium">Administrators</p>
+            <p className="text-3xl font-bold text-slate-800 mt-1">
+              {users.filter(u => u.role === 'admin').length}
+            </p>
+            <p className="text-purple-600 text-sm mt-2">Full system access</p>
           </div>
         </div>
 
-        <div className="card bg-gradient-to-r from-blue-500 to-blue-600 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-blue-100 text-sm">Regular Users</p>
-              <p className="text-2xl font-bold">
-                {users.filter(u => u.role === 'user').length}
-              </p>
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-slate-200/60 hover:shadow-xl transition-all duration-300">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-3 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl shadow-lg">
+              <UsersIcon size={24} className="text-white" />
             </div>
-            <UsersIcon size={32} className="text-blue-200" />
+            <UserCheck size={20} className="text-blue-500" />
+          </div>
+          <div>
+            <p className="text-slate-600 text-sm font-medium">Regular Users</p>
+            <p className="text-3xl font-bold text-slate-800 mt-1">
+              {users.filter(u => u.role === 'user').length}
+            </p>
+            <p className="text-blue-600 text-sm mt-2">Standard access</p>
           </div>
         </div>
 
-        <div className="card bg-gradient-to-r from-gray-500 to-gray-600 text-white">
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-slate-200/60 hover:shadow-xl transition-all duration-300">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-3 bg-gradient-to-r from-slate-500 to-slate-600 rounded-xl shadow-lg">
+              <Shield size={24} className="text-white" />
+            </div>
+            <UserX size={20} className="text-slate-500" />
+          </div>
+          <div>
+            <p className="text-slate-600 text-sm font-medium">Read-only Users</p>
+            <p className="text-3xl font-bold text-slate-800 mt-1">
+              {users.filter(u => u.role === 'read-only').length}
+            </p>
+            <p className="text-slate-600 text-sm mt-2">View-only access</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Users List */}
+      <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-slate-200/60">
+        <div className="p-6 border-b border-slate-100">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-gray-100 text-sm">Read-only Users</p>
-              <p className="text-2xl font-bold">
-                {users.filter(u => u.role === 'read-only').length}
+              <h2 className="text-xl font-bold text-slate-800">All Users</h2>
+              <p className="text-slate-600 text-sm mt-1">Manage user accounts and permissions</p>
+            </div>
+            <div className="text-slate-400">
+              <UsersIcon size={24} />
+            </div>
+          </div>
+        </div>
+
+        <div className="p-6">
+          {users.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <UsersIcon size={24} className="text-slate-400" />
+              </div>
+              <p className="text-slate-600 font-medium">No users found</p>
+              <p className="text-slate-500 text-sm mt-1">
+                Start by adding your first user to the system
               </p>
             </div>
-            <Shield size={32} className="text-gray-200" />
-          </div>
+          ) : (
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-slate-200">
+                    <th className="text-left py-4 px-6 font-semibold text-slate-700">User</th>
+                    <th className="text-left py-4 px-6 font-semibold text-slate-700">Email</th>
+                    <th className="text-left py-4 px-6 font-semibold text-slate-700">Role</th>
+                    <th className="text-left py-4 px-6 font-semibold text-slate-700">Joined</th>
+                    <th className="text-right py-4 px-6 font-semibold text-slate-700">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((userData, index) => (
+                    <tr 
+                      key={userData._id} 
+                      className={`border-b border-slate-100 hover:bg-slate-50/50 transition-all duration-200 ${
+                        index % 2 === 0 ? 'bg-white/50' : 'bg-slate-50/30'
+                      }`}
+                    >
+                      <td className="py-4 px-6">
+                        <div className="flex items-center space-x-4">
+                          <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center shadow-lg">
+                            <span className="text-white font-semibold text-sm">
+                              {userData.name.charAt(0).toUpperCase()}
+                            </span>
+                          </div>
+                          <div>
+                            <p className="font-semibold text-slate-800">{userData.name}</p>
+                            <p className="text-sm text-slate-500">ID: {userData._id.slice(-6)}</p>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="py-4 px-6 text-slate-600">
+                        {userData.email}
+                      </td>
+                      <td className="py-4 px-6">
+                        <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium capitalize ${getRoleBadgeColor(userData.role)}`}>
+                          <Shield size={12} className="mr-1" />
+                          {userData.role}
+                        </span>
+                      </td>
+                      <td className="py-4 px-6 text-slate-600">
+                        {new Date(userData.createdAt).toLocaleDateString()}
+                      </td>
+                      <td className="py-4 px-6 text-right">
+                        <div className="flex items-center justify-end space-x-2">
+                          <button
+                            onClick={() => {
+                              setEditingUser(userData);
+                              setShowForm(true);
+                            }}
+                            className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-all duration-200"
+                          >
+                            <Edit size={16} />
+                          </button>
+                          {userData._id !== user._id && (
+                            <button
+                              onClick={() => handleDeleteUser(userData._id)}
+                              className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-all duration-200"
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          )}
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
       </div>
     </div>

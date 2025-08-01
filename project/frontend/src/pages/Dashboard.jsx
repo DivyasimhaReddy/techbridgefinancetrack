@@ -5,7 +5,10 @@ import {
   TrendingDown, 
   DollarSign, 
   PieChart,
-  Calendar
+  Calendar,
+  Plus,
+  ArrowUpRight,
+  ArrowDownRight
 } from 'lucide-react';
 import axios from 'axios';
 
@@ -64,138 +67,195 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="space-y-6 fade-in">
+    <div className="space-y-8 fade-in">
+      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">
+          <h1 className="text-3xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
             Welcome back, {user?.name}!
           </h1>
-          <p className="text-gray-600 mt-1">
-            Here's your financial overview
+          <p className="text-slate-600 mt-2">
+            Here's your financial overview for {timeRange === 'week' ? 'this week' : timeRange === 'month' ? 'this month' : 'this year'}
           </p>
         </div>
         
-        <div className="flex items-center space-x-2">
-          <Calendar size={20} className="text-gray-500" />
-          <select
-            value={timeRange}
-            onChange={(e) => setTimeRange(e.target.value)}
-            className="select-field min-w-0"
-          >
-            <option value="week">This Week</option>
-            <option value="month">This Month</option>
-            <option value="year">This Year</option>
-          </select>
+        <div className="flex items-center space-x-3">
+          <div className="relative">
+            <Calendar size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
+            <select
+              value={timeRange}
+              onChange={(e) => setTimeRange(e.target.value)}
+              className="pl-10 pr-4 py-2 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 shadow-sm"
+            >
+              <option value="week">This Week</option>
+              <option value="month">This Month</option>
+              <option value="year">This Year</option>
+            </select>
+          </div>
         </div>
       </div>
 
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="card bg-gradient-to-r from-green-500 to-green-600 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-green-100 text-sm">Total Income</p>
-              <p className="text-2xl font-bold">${stats.income.toFixed(2)}</p>
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-slate-200/60 hover:shadow-xl transition-all duration-300">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-3 bg-gradient-to-r from-emerald-500 to-emerald-600 rounded-xl shadow-lg">
+              <TrendingUp size={24} className="text-white" />
             </div>
-            <TrendingUp size={32} className="text-green-200" />
+            <ArrowUpRight size={20} className="text-emerald-500" />
+          </div>
+          <div>
+            <p className="text-slate-600 text-sm font-medium">Total Income</p>
+            <p className="text-3xl font-bold text-slate-800 mt-1">${stats.income.toFixed(2)}</p>
+            <p className="text-emerald-600 text-sm mt-2 flex items-center">
+              <TrendingUp size={14} className="mr-1" />
+              +12.5% from last period
+            </p>
           </div>
         </div>
 
-        <div className="card bg-gradient-to-r from-red-500 to-red-600 text-white">
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="text-red-100 text-sm">Total Expenses</p>
-              <p className="text-2xl font-bold">${stats.expenses.toFixed(2)}</p>
+        <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-slate-200/60 hover:shadow-xl transition-all duration-300">
+          <div className="flex items-center justify-between mb-4">
+            <div className="p-3 bg-gradient-to-r from-red-500 to-red-600 rounded-xl shadow-lg">
+              <TrendingDown size={24} className="text-white" />
             </div>
-            <TrendingDown size={32} className="text-red-200" />
+            <ArrowDownRight size={20} className="text-red-500" />
+          </div>
+          <div>
+            <p className="text-slate-600 text-sm font-medium">Total Expenses</p>
+            <p className="text-3xl font-bold text-slate-800 mt-1">${stats.expenses.toFixed(2)}</p>
+            <p className="text-red-600 text-sm mt-2 flex items-center">
+              <TrendingDown size={14} className="mr-1" />
+              +8.2% from last period
+            </p>
           </div>
         </div>
 
-        <div className={`card text-white ${
-          stats.balance >= 0 
-            ? 'bg-gradient-to-r from-blue-500 to-blue-600' 
-            : 'bg-gradient-to-r from-orange-500 to-orange-600'
+        <div className={`bg-white/80 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-slate-200/60 hover:shadow-xl transition-all duration-300 ${
+          stats.balance >= 0 ? 'ring-1 ring-emerald-200' : 'ring-1 ring-red-200'
         }`}>
-          <div className="flex items-center justify-between">
-            <div>
-              <p className={`text-sm ${
-                stats.balance >= 0 ? 'text-blue-100' : 'text-orange-100'
-              }`}>
-                Net Balance
-              </p>
-              <p className="text-2xl font-bold">${stats.balance.toFixed(2)}</p>
+          <div className="flex items-center justify-between mb-4">
+            <div className={`p-3 rounded-xl shadow-lg ${
+              stats.balance >= 0 
+                ? 'bg-gradient-to-r from-blue-500 to-blue-600' 
+                : 'bg-gradient-to-r from-orange-500 to-orange-600'
+            }`}>
+              <DollarSign size={24} className="text-white" />
             </div>
-            <DollarSign size={32} className={
-              stats.balance >= 0 ? 'text-blue-200' : 'text-orange-200'
-            } />
+            {stats.balance >= 0 ? (
+              <ArrowUpRight size={20} className="text-emerald-500" />
+            ) : (
+              <ArrowDownRight size={20} className="text-red-500" />
+            )}
+          </div>
+          <div>
+            <p className="text-slate-600 text-sm font-medium">Net Balance</p>
+            <p className={`text-3xl font-bold mt-1 ${
+              stats.balance >= 0 ? 'text-slate-800' : 'text-slate-800'
+            }`}>
+              ${stats.balance.toFixed(2)}
+            </p>
+            <p className={`text-sm mt-2 flex items-center ${
+              stats.balance >= 0 ? 'text-emerald-600' : 'text-red-600'
+            }`}>
+              {stats.balance >= 0 ? (
+                <>
+                  <TrendingUp size={14} className="mr-1" />
+                  +4.3% from last period
+                </>
+              ) : (
+                <>
+                  <TrendingDown size={14} className="mr-1" />
+                  -2.1% from last period
+                </>
+              )}
+            </p>
           </div>
         </div>
       </div>
 
       {/* Recent Transactions */}
-      <div className="card">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-gray-800">Recent Transactions</h2>
-          <PieChart size={24} className="text-gray-500" />
+      <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-slate-200/60">
+        <div className="p-6 border-b border-slate-100">
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-slate-800">Recent Transactions</h2>
+              <p className="text-slate-600 text-sm mt-1">Your latest financial activities</p>
+            </div>
+            <div className="flex items-center space-x-2">
+              <PieChart size={24} className="text-slate-400" />
+              <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl hover:shadow-lg transition-all duration-200">
+                <Plus size={16} />
+                <span className="text-sm font-medium">Add Transaction</span>
+              </button>
+            </div>
+          </div>
         </div>
 
-        {recentTransactions.length === 0 ? (
-          <div className="text-center py-8">
-            <p className="text-gray-500">No transactions found</p>
-            <p className="text-sm text-gray-400 mt-1">
-              Start by adding your first transaction
-            </p>
-          </div>
-        ) : (
-          <div className="space-y-3">
-            {recentTransactions.map((transaction) => (
-              <div
-                key={transaction._id}
-                className="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors"
-              >
-                <div className="flex items-center space-x-3">
-                  <div className={`w-3 h-3 rounded-full ${
-                    transaction.type === 'income' ? 'bg-green-500' : 'bg-red-500'
-                  }`}></div>
-                  <div>
-                    <p className="font-medium text-gray-800">
-                      {transaction.description || transaction.category}
-                    </p>
-                    <p className="text-sm text-gray-500">
-                      {transaction.category} • {new Date(transaction.date).toLocaleDateString()}
-                    </p>
-                  </div>
-                </div>
-                <p className={`font-semibold ${
-                  transaction.type === 'income' ? 'text-green-600' : 'text-red-600'
-                }`}>
-                  {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
-                </p>
+        <div className="p-6">
+          {recentTransactions.length === 0 ? (
+            <div className="text-center py-12">
+              <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                <PieChart size={24} className="text-slate-400" />
               </div>
-            ))}
-          </div>
-        )}
+              <p className="text-slate-600 font-medium">No transactions found</p>
+              <p className="text-slate-500 text-sm mt-1">
+                Start by adding your first transaction to track your finances
+              </p>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {recentTransactions.map((transaction) => (
+                <div
+                  key={transaction._id}
+                  className="flex items-center justify-between p-4 bg-slate-50/50 rounded-xl hover:bg-slate-100/50 transition-all duration-200 border border-slate-200/30"
+                >
+                  <div className="flex items-center space-x-4">
+                    <div className={`w-3 h-3 rounded-full ${
+                      transaction.type === 'income' ? 'bg-emerald-500' : 'bg-red-500'
+                    }`}></div>
+                    <div>
+                      <p className="font-semibold text-slate-800">
+                        {transaction.description || transaction.category}
+                      </p>
+                      <p className="text-sm text-slate-500">
+                        {transaction.category} • {new Date(transaction.date).toLocaleDateString()}
+                      </p>
+                    </div>
+                  </div>
+                  <p className={`font-bold text-lg ${
+                    transaction.type === 'income' ? 'text-emerald-600' : 'text-red-600'
+                  }`}>
+                    {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
+                  </p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Quick Actions */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <div className="card bg-gradient-to-r from-primary-500 to-primary-600 text-white">
-          <h3 className="text-lg font-semibold mb-2">Financial Tips</h3>
-          <p className="text-primary-100 text-sm mb-4">
-            Track your expenses regularly to maintain better financial health.
+        <div className="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+          <h3 className="text-lg font-semibold mb-3">Financial Tips</h3>
+          <p className="text-blue-100 text-sm mb-4">
+            Track your expenses regularly to maintain better financial health and achieve your goals faster.
           </p>
-          <div className="text-primary-200 text-xs">
-            💡 Tip: Review your spending patterns weekly
+          <div className="text-blue-200 text-xs flex items-center">
+            <span className="mr-2">💡</span>
+            Review your spending patterns weekly for better insights
           </div>
         </div>
 
-        <div className="card bg-gradient-to-r from-secondary-500 to-secondary-600 text-white">
-          <h3 className="text-lg font-semibold mb-2">Budget Goal</h3>
-          <p className="text-secondary-100 text-sm mb-4">
-            Set monthly spending limits to achieve your financial goals.
+        <div className="bg-gradient-to-r from-emerald-500 to-teal-600 rounded-2xl p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300">
+          <h3 className="text-lg font-semibold mb-3">Budget Goal</h3>
+          <p className="text-emerald-100 text-sm mb-4">
+            Set monthly spending limits to achieve your financial goals and build wealth over time.
           </p>
-          <div className="text-secondary-200 text-xs">
-            🎯 Goal: Save 20% of your income
+          <div className="text-emerald-200 text-xs flex items-center">
+            <span className="mr-2">🎯</span>
+            Goal: Save 20% of your income monthly
           </div>
         </div>
       </div>
