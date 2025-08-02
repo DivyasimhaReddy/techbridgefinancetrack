@@ -109,15 +109,7 @@ const Transactions = () => {
           <p className="text-slate-600 mt-1">Manage your income and expenses</p>
         </div>
         
-        {canAddTransaction && (
-          <button
-            onClick={() => setShowForm(true)}
-            className="btn-primary flex items-center justify-center space-x-2 w-full sm:w-auto"
-          >
-            <Plus size={20} />
-            <span>Add Transaction</span>
-          </button>
-        )}
+
       </div>
 
       {/* Filters */}

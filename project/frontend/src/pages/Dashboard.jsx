@@ -177,18 +177,9 @@ const Dashboard = () => {
       {/* Recent Transactions */}
       <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-slate-200/60">
         <div className="p-6 border-b border-slate-100">
-          <div className="flex items-center justify-between">
-            <div>
-              <h2 className="text-xl font-bold text-slate-800">Recent Transactions</h2>
-              <p className="text-slate-600 text-sm mt-1">Your latest financial activities</p>
-            </div>
-            <div className="hidden md:flex items-center space-x-2">
-              <PieChart size={24} className="text-slate-400" />
-              <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl hover:shadow-lg transition-all duration-200">
-                <Plus size={16} />
-                <span className="text-sm font-medium">Add Transaction</span>
-              </button>
-            </div>
+          <div>
+            <h2 className="text-xl font-bold text-slate-800">Recent Transactions</h2>
+            <p className="text-slate-600 text-sm mt-1">Your latest financial activities</p>
           </div>
         </div>
 
