@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import TransactionForm from '../components/TransactionForm';
 import { 
   TrendingUp, 
   TrendingDown, 
@@ -17,6 +18,8 @@ const Dashboard = () => {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState('month');
+  const [showForm, setShowForm] = useState(false);
+  const [editingTransaction, setEditingTransaction] = useState(null);
 
   const API_URL = import.meta.env.VITE_API_URL;
 
@@ -57,6 +60,22 @@ const Dashboard = () => {
       .sort((a, b) => new Date(b.date) - new Date(a.date))
       .slice(0, 5);
   }, [transactions]);
+
+  const handleSaveTransaction = useCallback(async (transactionData) => {
+    try {
+      if (editingTransaction) {
+        await axios.put(`${API_URL}/transactions/${editingTransaction._id}`, transactionData);
+      } else {
+        await axios.post(`${API_URL}/transactions`, transactionData);
+      }
+      
+      fetchTransactions();
+      setShowForm(false);
+      setEditingTransaction(null);
+    } catch (error) {
+      console.error('Error saving transaction:', error);
+    }
+  }, [editingTransaction, API_URL]);
 
   if (loading) {
     return (
@@ -177,9 +196,21 @@ const Dashboard = () => {
       {/* Recent Transactions */}
       <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-lg border border-slate-200/60">
         <div className="p-6 border-b border-slate-100">
-          <div>
-            <h2 className="text-xl font-bold text-slate-800">Recent Transactions</h2>
-            <p className="text-slate-600 text-sm mt-1">Your latest financial activities</p>
+          <div className="flex items-center justify-between">
+            <div>
+              <h2 className="text-xl font-bold text-slate-800">Recent Transactions</h2>
+              <p className="text-slate-600 text-sm mt-1">Your latest financial activities</p>
+            </div>
+            <div className="flex items-center space-x-2">
+              <PieChart size={24} className="text-slate-400" />
+              <button 
+                onClick={() => setShowForm(true)}
+                className="flex items-center space-x-2 px-3 py-2 md:px-4 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl hover:shadow-lg transition-all duration-200 text-xs md:text-sm"
+              >
+                <Plus size={14} className="md:w-4 md:h-4" />
+                <span className="font-medium">Add Transaction</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -250,6 +281,19 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
+
+      {/* Transaction Form Modal */}
+      {showForm && (
+        <TransactionForm
+          transaction={editingTransaction}
+          onSave={handleSaveTransaction}
+          onCancel={() => {
+            setShowForm(false);
+            setEditingTransaction(null);
+          }}
+          isReadOnly={false}
+        />
+      )}
     </div>
   );
 };
