@@ -9,7 +9,7 @@ const Navbar = () => {
   return (
     <nav className="bg-white/80 backdrop-blur-md border-b border-slate-200/60 shadow-sm sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 py-4 lg:px-6">
-        <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center">
           <div className="flex items-center space-x-3">
             <div className="p-2 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-lg">
               <Wallet size={24} className="text-white" />
@@ -25,12 +25,12 @@ const Navbar = () => {
                 Finance Tracker
               </h1>
             </div>
-          </div>
+        </div>
 
-          <div className="flex items-center space-x-4">
-            <div className="relative">
-              <button
-                onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        <div className="flex items-center space-x-4">
+          <div className="relative">
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
                 className="flex items-center space-x-3 px-3 py-2 bg-white/60 backdrop-blur-sm border border-slate-200 rounded-xl hover:bg-white/80 transition-all duration-200 shadow-sm hover:shadow-md"
               >
                 <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center">
@@ -40,9 +40,9 @@ const Navbar = () => {
                   <p className="text-sm font-medium text-slate-800">{user?.name}</p>
                   <p className="text-xs text-slate-500">{user?.role}</p>
                 </div>
-              </button>
+            </button>
 
-              {isDropdownOpen && (
+            {isDropdownOpen && (
                 <div className="absolute right-0 mt-3 w-64 bg-white/95 backdrop-blur-md rounded-2xl shadow-xl border border-slate-200/60 z-50 overflow-hidden">
                   <div className="p-6 border-b border-slate-100">
                     <div className="flex items-center space-x-3">
@@ -57,19 +57,19 @@ const Navbar = () => {
                         </span>
                       </div>
                     </div>
-                  </div>
-                  <button
-                    onClick={() => {
-                      logout();
-                      setIsDropdownOpen(false);
-                    }}
+                </div>
+                <button
+                  onClick={() => {
+                    logout();
+                    setIsDropdownOpen(false);
+                  }}
                     className="w-full flex items-center space-x-3 px-6 py-4 text-slate-700 hover:bg-red-50 hover:text-red-600 transition-all duration-200"
-                  >
+                >
                     <LogOut size={18} />
                     <span className="font-medium">Sign Out</span>
-                  </button>
-                </div>
-              )}
+                </button>
+              </div>
+            )}
             </div>
           </div>
         </div>

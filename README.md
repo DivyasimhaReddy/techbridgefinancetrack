@@ -70,6 +70,11 @@ A modern, full-stack personal finance management application built with React, N
    ```env
    VITE_API_URL=http://localhost:5000/api
    ```
+   
+   **For Production Deployment**
+   ```env
+   VITE_API_URL=https://techbridgefinancetrack.onrender.com/api
+   ```
 
 4. **Start the application**
    ```bash
@@ -194,7 +199,7 @@ The application uses Tailwind CSS with custom components. To modify the design:
 ## 🚀 Deployment
 
 ### Backend Deployment (Render.com)
-Your backend is already deployed at: `https://techbridgee.onrender.com`
+Your backend is already deployed at: `https://techbridgefinancetrack.onrender.com`
 
 **To deploy to Render:**
 1. Connect your GitHub repository to Render
@@ -245,7 +250,7 @@ npm run deploy
 
 **Frontend (.env):**
 ```env
-VITE_API_URL=https://techbridgee.onrender.com/api
+VITE_API_URL=https://techbridgefinancetrack.onrender.com/api
 ```
 
 **Backend (.env):**

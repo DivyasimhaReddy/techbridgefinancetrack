@@ -21,7 +21,7 @@ const Dashboard = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingTransaction, setEditingTransaction] = useState(null);
 
-  const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL || 'https://techbridgefinancetrack.onrender.com/api';
 
   useEffect(() => {
     fetchTransactions();
@@ -105,15 +105,15 @@ const Dashboard = () => {
         <div className="flex items-center space-x-3">
           <div className="relative">
             <Calendar size={20} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
-            <select
-              value={timeRange}
-              onChange={(e) => setTimeRange(e.target.value)}
+          <select
+            value={timeRange}
+            onChange={(e) => setTimeRange(e.target.value)}
               className="pl-10 pr-4 py-2 bg-white/80 backdrop-blur-sm border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all duration-200 shadow-sm"
-            >
-              <option value="week">This Week</option>
-              <option value="month">This Month</option>
-              <option value="year">This Year</option>
-            </select>
+          >
+            <option value="week">This Week</option>
+            <option value="month">This Month</option>
+            <option value="year">This Year</option>
+          </select>
           </div>
         </div>
       </div>
@@ -159,10 +159,10 @@ const Dashboard = () => {
         }`}>
           <div className="flex items-center justify-between mb-4">
             <div className={`p-3 rounded-xl shadow-lg ${
-              stats.balance >= 0 
-                ? 'bg-gradient-to-r from-blue-500 to-blue-600' 
-                : 'bg-gradient-to-r from-orange-500 to-orange-600'
-            }`}>
+          stats.balance >= 0 
+            ? 'bg-gradient-to-r from-blue-500 to-blue-600' 
+            : 'bg-gradient-to-r from-orange-500 to-orange-600'
+        }`}>
               <DollarSign size={24} className="text-white" />
             </div>
             {stats.balance >= 0 ? (
@@ -222,7 +222,7 @@ const Dashboard = () => {
         </div>
 
         <div className="p-6">
-          {recentTransactions.length === 0 ? (
+        {recentTransactions.length === 0 ? (
             <div className="text-center py-12">
               <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <PieChart size={24} className="text-slate-400" />
@@ -230,37 +230,37 @@ const Dashboard = () => {
               <p className="text-slate-600 font-medium">No transactions found</p>
               <p className="text-slate-500 text-sm mt-1">
                 Start by adding your first transaction to track your finances
-              </p>
-            </div>
-          ) : (
+            </p>
+          </div>
+        ) : (
             <div className="space-y-4">
-              {recentTransactions.map((transaction) => (
-                <div
-                  key={transaction._id}
+            {recentTransactions.map((transaction) => (
+              <div
+                key={transaction._id}
                   className="flex items-center justify-between p-4 bg-slate-50/50 rounded-xl hover:bg-slate-100/50 transition-all duration-200 border border-slate-200/30"
-                >
+              >
                   <div className="flex items-center space-x-4">
-                    <div className={`w-3 h-3 rounded-full ${
+                  <div className={`w-3 h-3 rounded-full ${
                       transaction.type === 'income' ? 'bg-emerald-500' : 'bg-red-500'
-                    }`}></div>
-                    <div>
+                  }`}></div>
+                  <div>
                       <p className="font-semibold text-slate-800">
-                        {transaction.description || transaction.category}
-                      </p>
+                      {transaction.description || transaction.category}
+                    </p>
                       <p className="text-sm text-slate-500">
-                        {transaction.category} • {new Date(transaction.date).toLocaleDateString()}
-                      </p>
-                    </div>
+                      {transaction.category} • {new Date(transaction.date).toLocaleDateString()}
+                    </p>
                   </div>
+                </div>
                   <p className={`font-bold text-lg ${
                     transaction.type === 'income' ? 'text-emerald-600' : 'text-red-600'
-                  }`}>
-                    {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
-                  </p>
-                </div>
-              ))}
-            </div>
-          )}
+                }`}>
+                  {transaction.type === 'income' ? '+' : '-'}${transaction.amount.toFixed(2)}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
         </div>
       </div>
 

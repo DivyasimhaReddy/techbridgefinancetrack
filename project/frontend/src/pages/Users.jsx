@@ -10,7 +10,7 @@ const Users = () => {
   const [showForm, setShowForm] = useState(false);
   const [editingUser, setEditingUser] = useState(null);
 
-  const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL || 'https://techbridgefinancetrack.onrender.com/api';
 
   useEffect(() => {
     if (user?.role === 'admin') {
@@ -164,8 +164,8 @@ const Users = () => {
         </div>
 
         <div className="p-6">
-          {users.length === 0 ? (
-            <div className="text-center py-12">
+        {users.length === 0 ? (
+          <div className="text-center py-12">
               <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <UsersIcon size={24} className="text-slate-400" />
               </div>
@@ -173,79 +173,79 @@ const Users = () => {
               <p className="text-slate-500 text-sm mt-1">
                 Start by adding your first user to the system
               </p>
-            </div>
-          ) : (
-            <div className="overflow-x-auto">
-              <table className="w-full">
-                <thead>
+          </div>
+        ) : (
+          <div className="overflow-x-auto">
+            <table className="w-full">
+              <thead>
                   <tr className="border-b border-slate-200">
                     <th className="text-left py-4 px-6 font-semibold text-slate-700">User</th>
                     <th className="text-left py-4 px-6 font-semibold text-slate-700">Email</th>
                     <th className="text-left py-4 px-6 font-semibold text-slate-700">Role</th>
                     <th className="text-left py-4 px-6 font-semibold text-slate-700">Joined</th>
                     <th className="text-right py-4 px-6 font-semibold text-slate-700">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {users.map((userData, index) => (
-                    <tr 
-                      key={userData._id} 
+                </tr>
+              </thead>
+              <tbody>
+                {users.map((userData, index) => (
+                  <tr 
+                    key={userData._id} 
                       className={`border-b border-slate-100 hover:bg-slate-50/50 transition-all duration-200 ${
                         index % 2 === 0 ? 'bg-white/50' : 'bg-slate-50/30'
-                      }`}
-                    >
+                    }`}
+                  >
                       <td className="py-4 px-6">
                         <div className="flex items-center space-x-4">
                           <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center shadow-lg">
                             <span className="text-white font-semibold text-sm">
-                              {userData.name.charAt(0).toUpperCase()}
-                            </span>
-                          </div>
-                          <div>
+                            {userData.name.charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                        <div>
                             <p className="font-semibold text-slate-800">{userData.name}</p>
                             <p className="text-sm text-slate-500">ID: {userData._id.slice(-6)}</p>
-                          </div>
                         </div>
-                      </td>
+                      </div>
+                    </td>
                       <td className="py-4 px-6 text-slate-600">
-                        {userData.email}
-                      </td>
+                      {userData.email}
+                    </td>
                       <td className="py-4 px-6">
                         <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium capitalize ${getRoleBadgeColor(userData.role)}`}>
-                          <Shield size={12} className="mr-1" />
-                          {userData.role}
-                        </span>
-                      </td>
+                        <Shield size={12} className="mr-1" />
+                        {userData.role}
+                      </span>
+                    </td>
                       <td className="py-4 px-6 text-slate-600">
-                        {new Date(userData.createdAt).toLocaleDateString()}
-                      </td>
+                      {new Date(userData.createdAt).toLocaleDateString()}
+                    </td>
                       <td className="py-4 px-6 text-right">
-                        <div className="flex items-center justify-end space-x-2">
-                          <button
-                            onClick={() => {
-                              setEditingUser(userData);
-                              setShowForm(true);
-                            }}
+                      <div className="flex items-center justify-end space-x-2">
+                        <button
+                          onClick={() => {
+                            setEditingUser(userData);
+                            setShowForm(true);
+                          }}
                             className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-all duration-200"
-                          >
-                            <Edit size={16} />
-                          </button>
-                          {userData._id !== user._id && (
-                            <button
-                              onClick={() => handleDeleteUser(userData._id)}
+                        >
+                          <Edit size={16} />
+                        </button>
+                        {userData._id !== user._id && (
+                          <button
+                            onClick={() => handleDeleteUser(userData._id)}
                               className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-all duration-200"
-                            >
-                              <Trash2 size={16} />
-                            </button>
-                          )}
-                        </div>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+                          >
+                            <Trash2 size={16} />
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
         </div>
       </div>
     </div>

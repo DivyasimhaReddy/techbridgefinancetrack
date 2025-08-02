@@ -114,7 +114,7 @@ router.get('/', authenticate, async (req, res) => {
       timeRange
     } = req.query;
 
-
+    
 
     // Build query
     let query = { userId: req.user._id };

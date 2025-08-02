@@ -33,7 +33,7 @@ const Analytics = () => {
   const [timeRange, setTimeRange] = useState('month');
   const [activeChart, setActiveChart] = useState('category');
 
-  const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL || 'https://techbridgefinancetrack.onrender.com/api';
 
   useEffect(() => {
     fetchTransactions();

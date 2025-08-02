@@ -24,7 +24,7 @@ const Transactions = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = import.meta.env.VITE_API_URL || 'https://techbridgefinancetrack.onrender.com/api';
   const ITEMS_PER_PAGE = 10;
 
   // Fix: Admin users should be able to add transactions
@@ -168,24 +168,24 @@ const Transactions = () => {
         </div>
 
         <div className="p-6">
-          {filteredTransactions.length === 0 ? (
-            <div className="text-center py-12">
+        {filteredTransactions.length === 0 ? (
+          <div className="text-center py-12">
               <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <Search size={24} className="text-slate-400" />
               </div>
               <p className="text-slate-600 font-medium">No transactions found</p>
               <p className="text-slate-500 text-sm mt-1">
-                {searchTerm || filterType !== 'all' || filterCategory !== 'all'
-                  ? 'Try adjusting your filters'
-                  : 'Start by adding your first transaction'
-                }
-              </p>
-            </div>
-          ) : (
-            <>
-              <div className="overflow-x-auto">
-                <table className="w-full">
-                  <thead>
+              {searchTerm || filterType !== 'all' || filterCategory !== 'all'
+                ? 'Try adjusting your filters'
+                : 'Start by adding your first transaction'
+              }
+            </p>
+          </div>
+        ) : (
+          <>
+            <div className="overflow-x-auto">
+              <table className="w-full">
+                <thead>
                     <tr className="border-b border-slate-200">
                       <th className="text-left py-4 px-4 font-semibold text-slate-700">Transaction</th>
                       <th className="text-left py-4 px-4 font-semibold text-slate-700">Category</th>
@@ -193,39 +193,39 @@ const Transactions = () => {
                       <th className="text-right py-4 px-4 font-semibold text-slate-700">Amount</th>
                       {canAddTransaction && (
                         <th className="text-right py-4 px-4 font-semibold text-slate-700">Actions</th>
-                      )}
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredTransactions.map((transaction, index) => (
-                      <tr 
-                        key={transaction._id} 
+                    )}
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredTransactions.map((transaction, index) => (
+                    <tr 
+                      key={transaction._id} 
                         className={`border-b border-slate-100 hover:bg-slate-50/50 transition-all duration-200 ${
                           index % 2 === 0 ? 'bg-white/50' : 'bg-slate-50/30'
-                        }`}
-                      >
-                        <td className="py-4 px-4">
-                          <div>
+                      }`}
+                    >
+                      <td className="py-4 px-4">
+                        <div>
                             <p className="font-semibold text-slate-800">
                               {transaction.description || transaction.category}
                             </p>
                             <p className="text-sm text-slate-500">
                               {transaction.description && transaction.category}
-                            </p>
-                          </div>
-                        </td>
-                        <td className="py-4 px-4">
+                          </p>
+                        </div>
+                      </td>
+                      <td className="py-4 px-4">
                           <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium capitalize ${
                             transaction.type === 'income' 
                               ? 'bg-emerald-100 text-emerald-700' 
                               : 'bg-red-100 text-red-700'
                           }`}>
-                            {transaction.category}
-                          </span>
-                        </td>
+                          {transaction.category}
+                        </span>
+                      </td>
                         <td className="py-4 px-4 text-slate-600">
                           {new Date(transaction.date).toLocaleDateString()}
-                        </td>
+                      </td>
                         <td className="py-4 px-4 text-right">
                           <p className={`font-bold text-lg ${
                             transaction.type === 'income' ? 'text-emerald-600' : 'text-red-600'
@@ -234,58 +234,58 @@ const Transactions = () => {
                           </p>
                         </td>
                         {canAddTransaction && (
-                          <td className="py-4 px-4 text-right">
-                            <div className="flex items-center justify-end space-x-2">
-                              <button
-                                onClick={() => {
-                                  setEditingTransaction(transaction);
-                                  setShowForm(true);
-                                }}
+                        <td className="py-4 px-4 text-right">
+                          <div className="flex items-center justify-end space-x-2">
+                            <button
+                              onClick={() => {
+                                setEditingTransaction(transaction);
+                                setShowForm(true);
+                              }}
                                 className="p-2 text-blue-600 hover:text-blue-800 hover:bg-blue-50 rounded-lg transition-all duration-200"
-                              >
-                                <Edit size={16} />
-                              </button>
-                              <button
-                                onClick={() => handleDeleteTransaction(transaction._id)}
+                            >
+                              <Edit size={16} />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteTransaction(transaction._id)}
                                 className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-lg transition-all duration-200"
-                              >
-                                <Trash2 size={16} />
-                              </button>
-                            </div>
-                          </td>
-                        )}
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
+                            >
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      )}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
-              {/* Pagination */}
-              {totalPages > 1 && (
+            {/* Pagination */}
+            {totalPages > 1 && (
                 <div className="flex items-center justify-between mt-6 pt-6 border-t border-slate-200">
                   <div className="text-sm text-slate-600">
-                    Page {currentPage} of {totalPages}
+                  Page {currentPage} of {totalPages}
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <button
-                      onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-                      disabled={currentPage === 1}
+                <div className="flex items-center space-x-2">
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+                    disabled={currentPage === 1}
                       className="p-2 text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
+                  >
                       <ChevronLeft size={20} />
-                    </button>
-                    <button
-                      onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-                      disabled={currentPage === totalPages}
+                  </button>
+                  <button
+                    onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+                    disabled={currentPage === totalPages}
                       className="p-2 text-slate-600 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                    >
+                  >
                       <ChevronRight size={20} />
-                    </button>
-                  </div>
+                  </button>
                 </div>
-              )}
-            </>
-          )}
+              </div>
+            )}
+          </>
+        )}
         </div>
       </div>
 

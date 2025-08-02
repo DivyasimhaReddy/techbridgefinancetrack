@@ -68,26 +68,26 @@ const Sidebar = () => {
                 Navigation
               </h3>
             </div>
-            <ul className="space-y-2">
-              {navItems.map((item) => (
-                <li key={item.to}>
-                  <NavLink
-                    to={item.to}
+        <ul className="space-y-2">
+          {navItems.map((item) => (
+            <li key={item.to}>
+              <NavLink
+                to={item.to}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className={({ isActive }) =>
+                className={({ isActive }) =>
                       `flex items-center space-x-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
-                        isActive
+                    isActive
                           ? 'bg-gradient-to-r from-blue-500 to-indigo-500 text-white shadow-lg shadow-blue-500/25'
                           : 'text-slate-600 hover:bg-slate-50 hover:text-slate-800'
-                      }`
-                    }
-                  >
+                  }`
+                }
+              >
                     <item.icon size={20} className="group-hover:scale-110 transition-transform duration-200" />
                     <span className="font-medium">{item.label}</span>
-                  </NavLink>
-                </li>
-              ))}
-            </ul>
+              </NavLink>
+            </li>
+          ))}
+        </ul>
           </div>
           
           {/* User Info */}
@@ -98,8 +98,8 @@ const Sidebar = () => {
               <p className="text-xs text-slate-500 mt-1 capitalize">{user?.role}</p>
             </div>
           </div>
-        </nav>
-      </aside>
+      </nav>
+    </aside>
     </>
   );
 };
