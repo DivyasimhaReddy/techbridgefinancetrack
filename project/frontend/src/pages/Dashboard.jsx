@@ -182,7 +182,7 @@ const Dashboard = () => {
               <h2 className="text-xl font-bold text-slate-800">Recent Transactions</h2>
               <p className="text-slate-600 text-sm mt-1">Your latest financial activities</p>
             </div>
-            <div className="flex items-center space-x-2">
+            <div className="hidden md:flex items-center space-x-2">
               <PieChart size={24} className="text-slate-400" />
               <button className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl hover:shadow-lg transition-all duration-200">
                 <Plus size={16} />
