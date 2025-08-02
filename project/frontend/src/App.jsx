@@ -3,6 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useAuth } from './contexts/AuthContext';
 import Layout from './components/Layout';
 import LoadingSpinner from './components/LoadingSpinner';
+import DebugInfo from './components/DebugInfo';
 
 // Lazy load components
 const Login = React.lazy(() => import('./pages/Login'));
@@ -49,6 +50,7 @@ function App() {
           )}
         </Routes>
       </Suspense>
+      <DebugInfo />
     </div>
   );
 }
