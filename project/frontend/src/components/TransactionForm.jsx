@@ -36,15 +36,15 @@ const TransactionForm = ({ transaction, onSave, onCancel, isReadOnly }) => {
   };
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-      <div className="bg-white rounded-xl p-6 w-full max-w-md mx-4">
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-semibold">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+      <div className="bg-white/95 backdrop-blur-md rounded-2xl p-6 w-full max-w-md mx-auto shadow-2xl border border-slate-200/60 max-h-[90vh] overflow-y-auto">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-xl font-bold text-slate-800">
             {transaction ? 'Edit Transaction' : 'Add Transaction'}
           </h2>
           <button
             onClick={onCancel}
-            className="text-gray-500 hover:text-gray-700"
+            className="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-all duration-200"
           >
             <X size={24} />
           </button>
@@ -52,7 +52,7 @@ const TransactionForm = ({ transaction, onSave, onCancel, isReadOnly }) => {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               Amount
             </label>
             <input
@@ -69,7 +69,7 @@ const TransactionForm = ({ transaction, onSave, onCancel, isReadOnly }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               Type
             </label>
             <select
@@ -86,7 +86,7 @@ const TransactionForm = ({ transaction, onSave, onCancel, isReadOnly }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               Category
             </label>
             <select
@@ -107,7 +107,7 @@ const TransactionForm = ({ transaction, onSave, onCancel, isReadOnly }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               Description
             </label>
             <input
@@ -122,7 +122,7 @@ const TransactionForm = ({ transaction, onSave, onCancel, isReadOnly }) => {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-semibold text-slate-700 mb-2">
               Date
             </label>
             <input
@@ -137,7 +137,7 @@ const TransactionForm = ({ transaction, onSave, onCancel, isReadOnly }) => {
           </div>
 
           {!isReadOnly && (
-            <div className="flex space-x-3 pt-4">
+            <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-3 pt-6">
               <button
                 type="submit"
                 className="btn-primary flex-1"

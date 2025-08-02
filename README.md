@@ -193,31 +193,68 @@ The application uses Tailwind CSS with custom components. To modify the design:
 
 ## 🚀 Deployment
 
-### Backend Deployment (Heroku)
+### Backend Deployment (Render.com)
+Your backend is already deployed at: `https://techbridgee.onrender.com`
+
+**To deploy to Render:**
+1. Connect your GitHub repository to Render
+2. Set environment variables:
+   - `MONGODB_URI`: Your MongoDB connection string
+   - `JWT_SECRET`: Your JWT secret key
+   - `NODE_ENV`: production
+3. Build Command: `npm install`
+4. Start Command: `npm start`
+
+### Frontend Deployment
+
+#### **Vercel (Recommended)**
 ```bash
-# Add to package.json
-"scripts": {
-  "start": "node server.js"
-}
+# Install Vercel CLI
+npm install -g vercel
 
-# Deploy
-git push heroku main
-```
-
-### Frontend Deployment (Vercel/Netlify)
-```bash
-# Build
-npm run build
-
-# Deploy
+# Deploy from frontend directory
+cd project/frontend
 vercel --prod
 ```
 
-### Environment Variables
-Set these in your deployment platform:
-- `MONGODB_URI`
-- `JWT_SECRET`
-- `NODE_ENV=production`
+#### **Netlify**
+```bash
+# Install Netlify CLI
+npm install -g netlify-cli
+
+# Build and deploy
+cd project/frontend
+npm run build
+netlify deploy --prod --dir=dist
+```
+
+#### **GitHub Pages**
+```bash
+# Add to package.json
+"homepage": "https://yourusername.github.io/FinanceTracker",
+"scripts": {
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d dist"
+}
+
+# Deploy
+npm run deploy
+```
+
+### Environment Variables for Production
+
+**Frontend (.env):**
+```env
+VITE_API_URL=https://techbridgee.onrender.com/api
+```
+
+**Backend (.env):**
+```env
+MONGODB_URI=mongodb+srv://your-username:your-password@your-cluster.mongodb.net/finance-tracker
+JWT_SECRET=your-super-secret-jwt-key-change-in-production
+PORT=5000
+NODE_ENV=production
+```
 
 ## 🤝 Contributing
 

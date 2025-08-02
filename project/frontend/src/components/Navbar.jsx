@@ -14,11 +14,16 @@ const Navbar = () => {
             <div className="p-2 bg-gradient-to-r from-blue-600 to-indigo-600 rounded-xl shadow-lg">
               <Wallet size={24} className="text-white" />
             </div>
-            <div>
+            <div className="hidden sm:block">
               <h1 className="text-xl font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
                 Finance Tracker
               </h1>
               <p className="text-xs text-slate-500">Personal Finance Management</p>
+            </div>
+            <div className="sm:hidden">
+              <h1 className="text-lg font-bold bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">
+                Finance Tracker
+              </h1>
             </div>
           </div>
 
@@ -26,7 +31,7 @@ const Navbar = () => {
             <div className="relative">
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center space-x-3 px-4 py-2 bg-white/60 backdrop-blur-sm border border-slate-200 rounded-xl hover:bg-white/80 transition-all duration-200 shadow-sm hover:shadow-md"
+                className="flex items-center space-x-3 px-3 py-2 bg-white/60 backdrop-blur-sm border border-slate-200 rounded-xl hover:bg-white/80 transition-all duration-200 shadow-sm hover:shadow-md"
               >
                 <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full flex items-center justify-center">
                   <User size={16} className="text-white" />
