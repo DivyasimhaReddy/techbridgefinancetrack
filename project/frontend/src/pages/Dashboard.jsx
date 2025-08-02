@@ -27,7 +27,7 @@ const Dashboard = () => {
     fetchTransactions();
   }, [timeRange]);
 
-  const fetchTransactions = async () => {
+  const fetchTransactions = useCallback(async () => {
     try {
       const response = await axios.get(`${API_URL}/transactions`, {
         params: { timeRange }
@@ -39,7 +39,7 @@ const Dashboard = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [API_URL, timeRange]);
 
   const stats = useMemo(() => {
     const income = transactions
@@ -62,20 +62,24 @@ const Dashboard = () => {
   }, [transactions]);
 
   const handleSaveTransaction = useCallback(async (transactionData) => {
+    console.log('handleSaveTransaction called with:', transactionData);
     try {
       if (editingTransaction) {
+        console.log('Editing transaction:', editingTransaction._id);
         await axios.put(`${API_URL}/transactions/${editingTransaction._id}`, transactionData);
       } else {
+        console.log('Creating new transaction');
         await axios.post(`${API_URL}/transactions`, transactionData);
       }
       
+      console.log('Transaction saved successfully');
       fetchTransactions();
       setShowForm(false);
       setEditingTransaction(null);
     } catch (error) {
       console.error('Error saving transaction:', error);
     }
-  }, [editingTransaction, API_URL]);
+  }, [editingTransaction, API_URL, fetchTransactions]);
 
   if (loading) {
     return (
@@ -204,7 +208,10 @@ const Dashboard = () => {
             <div className="flex items-center space-x-2">
               <PieChart size={24} className="text-slate-400" />
               <button 
-                onClick={() => setShowForm(true)}
+                onClick={() => {
+                  console.log('Add Transaction button clicked');
+                  setShowForm(true);
+                }}
                 className="flex items-center space-x-2 px-3 py-2 md:px-4 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-xl hover:shadow-lg transition-all duration-200 text-xs md:text-sm"
               >
                 <Plus size={14} className="md:w-4 md:h-4" />
@@ -284,15 +291,19 @@ const Dashboard = () => {
 
       {/* Transaction Form Modal */}
       {showForm && (
-        <TransactionForm
-          transaction={editingTransaction}
-          onSave={handleSaveTransaction}
-          onCancel={() => {
-            setShowForm(false);
-            setEditingTransaction(null);
-          }}
-          isReadOnly={false}
-        />
+        <>
+          {console.log('Rendering TransactionForm modal')}
+          <TransactionForm
+            transaction={editingTransaction}
+            onSave={handleSaveTransaction}
+            onCancel={() => {
+              console.log('TransactionForm cancelled');
+              setShowForm(false);
+              setEditingTransaction(null);
+            }}
+            isReadOnly={false}
+          />
+        </>
       )}
     </div>
   );

@@ -17,12 +17,15 @@ const TransactionForm = ({ transaction, onSave, onCancel, isReadOnly }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log('TransactionForm handleSubmit called');
     if (isReadOnly) return;
     
-    onSave({
+    const transactionData = {
       ...formData,
       amount: parseFloat(formData.amount)
-    });
+    };
+    console.log('Calling onSave with:', transactionData);
+    onSave(transactionData);
   };
 
   const handleChange = (e) => {
