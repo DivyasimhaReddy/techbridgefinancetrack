@@ -134,7 +134,7 @@ const Transactions = () => {
               <select
                 value={filterType}
                 onChange={(e) => setFilterType(e.target.value)}
-                className="select-field flex-1 sm:flex-none"
+                className="select-field max-w-xs"
               >
                 <option value="all">All Types</option>
                 <option value="income">Income</option>
@@ -145,7 +145,7 @@ const Transactions = () => {
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="select-field flex-1 sm:flex-none"
+              className="select-field max-w-xs"
             >
               <option value="all">All Categories</option>
               {categories.map(category => (
