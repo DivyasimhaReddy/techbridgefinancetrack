@@ -25,17 +25,6 @@ const Login = () => {
     setLoading(false);
   };
 
-  const demoCredentials = [
-    
-    { email: 'user@demo.com', password: 'user123', role: 'User' },
-    { email: 'readonly@demo.com', password: 'readonly123', role: 'Read-only' }
-  ];
-
-  const handleDemoLogin = (email, password) => {
-    setEmail(email);
-    setPassword(password);
-  };
-
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-50 to-secondary-50">
       <div className="max-w-md w-full mx-4">
