@@ -26,7 +26,6 @@ const Login = () => {
   };
 
   const demoCredentials = [
-    { email: 'admin@demo.com', password: 'admin123', role: 'Admin' },
     { email: 'user@demo.com', password: 'user123', role: 'User' },
     { email: 'readonly@demo.com', password: 'readonly123', role: 'Read-only' }
   ];
