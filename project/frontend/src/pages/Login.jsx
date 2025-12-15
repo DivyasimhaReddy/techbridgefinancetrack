@@ -98,7 +98,25 @@ const Login = () => {
               </Link>
             </p>
           </div>
-
+      <div className="mt-8 pt-6 border-t border-gray-200">
+  <h3 className="text-sm font-medium text-gray-700 mb-3 text-center">
+    Demo Credentials
+  </h3>
+  <div className="space-y-2">
+    {demoCredentials.map((cred, index) => (
+      <button
+        key={index}
+        onClick={() => handleDemoLogin(cred.email, cred.password)}
+        className="w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors"
+      >
+        <div className="flex justify-between items-center">
+          <span className="text-sm text-gray-700">{cred.role}</span>
+          <span className="text-xs text-gray-500">{cred.email}</span>
+        </div>
+      </button>
+    ))}
+  </div>
+</div>
         
         </div>
       </div>
